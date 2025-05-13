@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold mb-6">Seu Perfil</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nome de usuário</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.username.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.email.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                    Atualizar Perfil
+                </button>
+            </div>
+        </form>
+        
+        <div class="mt-6 pt-6 border-t border-gray-200">
+            <h2 class="text-lg font-semibold mb-4">Opções da Conta</h2>
+            <a href="{% url 'password_reset' %}" class="block text-blue-500 hover:underline mb-2">
+                Alterar senha
+            </a>
+            <a href="{% url 'logout' %}" class="block text-red-500 hover:underline">
+                Sair
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -20,21 +20,23 @@
         {% endif %}
         
         <div class="mb-6">
-            <h2 class="text-lg font-semibold mb-2">Progresso</h2>
-            <!-- Aqui você pode adicionar visualização de calendário/grid -->
+            <h2 class="text-lg font-semibold mb-4">Progresso dos últimos 30 dias</h2>
             <div class="grid grid-cols-7 gap-2">
-                {% for record in records|slice:":28" %}
-                    <div class="aspect-square rounded-md {% if record.completed %}bg-green-500{% else %}bg-gray-200{% endif %}"
-                         data-date="{{ record.date|date:'Y-m-d' }}"
-                         data-habit-id="{{ habit.id }}">
+                {% for day in heatmap_data %}
+                    <div class="aspect-square rounded-md cursor-pointer habit-cell 
+                         {% if day.completed %}bg-green-500{% else %}bg-gray-200{% endif %}
+                         {% if day.date == today %}border-2 border-blue-500{% endif %}"
+                         data-habit-id="{{ habit.id }}"
+                         data-date="{{ day.date|date:'Y-m-d' }}"
+                         title="{{ day.date|date:'d/m/Y' }}">
                     </div>
                 {% endfor %}
             </div>
         </div>
         
         <div class="mt-6">
-            <a href="{% url 'habit_list' %}" class="text-blue-500 hover:underline">
-                Voltar para lista de hábitos
+            <a href="{% url 'dashboard' %}" class="text-blue-500 hover:underline">
+                Voltar para dashboard
             </a>
         </div>
     </div>
