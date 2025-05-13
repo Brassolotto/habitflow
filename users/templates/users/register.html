@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">Criar Conta</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Nome de usuário</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.username.errors.0 }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Senha</label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.password1.errors.0 }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Confirmar senha</label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.password2.errors.0 }}</p>
+                {% endif %}
+            </div>
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                Registrar
+            </button>
+        </div>
+    </form>
+    <div class="mt-4 text-center">
+        <p class="text-sm text-gray-600">
+            Já tem uma conta? <a href="{% url 'login' %}" class="text-blue-500 hover:underline">Faça login</a>
+        </p>
+    </div>
+</div>
+{% endblock content %}
