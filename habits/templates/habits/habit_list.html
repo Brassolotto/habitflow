@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Meus Hábitos</h1>
+        <a href="{% url 'habit_create' %}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+            Adicionar Hábito
+        </a>
+    </div>
+    
+    {% if habits %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for habit in habits %}
+                <div class="bg-white rounded-lg shadow-md p-4 border-l-4" style="border-color: {{ habit.color }}">
+                    <h2 class="text-xl font-semibold mb-2">{{ habit.name }}</h2>
+                    {% if habit.description %}
+                        <p class="text-gray-600 mb-4">{{ habit.description|truncatechars:100 }}</p>
+                    {% endif %}
+                    <div class="flex justify-between items-center">
+                        <a href="{% url 'habit_detail' habit.pk %}" class="text-blue-500 hover:underline">
+                            Ver detalhes
+                        </a>
+                        <div class="flex space-x-2">
+                            <a href="{% url 'habit_update' habit.pk %}" class="text-gray-500 hover:text-gray-700">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            </a>
+                            <a href="{% url 'habit_archive' habit.pk %}" class="text-gray-500 hover:text-gray-700">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-8">
+            <p class="text-gray-500 mb-4">Você ainda não tem hábitos cadastrados.</p>
+            <a href="{% url 'habit_create' %}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                Adicione seu primeiro hábito
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

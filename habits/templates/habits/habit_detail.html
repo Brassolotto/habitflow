@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-md p-6 border-l-4" style="border-color: {{ habit.color }}">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">{{ habit.name }}</h1>
+            <div class="flex space-x-2">
+                <a href="{% url 'habit_update' habit.pk %}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded">
+                    Editar
+                </a>
+                <a href="{% url 'habit_archive' habit.pk %}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded">
+                    Arquivar
+                </a>
+            </div>
+        </div>
+        
+        {% if habit.description %}
+            <p class="text-gray-600 mb-6">{{ habit.description }}</p>
+        {% endif %}
+        
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-2">Progresso</h2>
+            <!-- Aqui você pode adicionar visualização de calendário/grid -->
+            <div class="grid grid-cols-7 gap-2">
+                {% for record in records|slice:":28" %}
+                    <div class="aspect-square rounded-md {% if record.completed %}bg-green-500{% else %}bg-gray-200{% endif %}"
+                         data-date="{{ record.date|date:'Y-m-d' }}"
+                         data-habit-id="{{ habit.id }}">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <a href="{% url 'habit_list' %}" class="text-blue-500 hover:underline">
+                Voltar para lista de hábitos
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
