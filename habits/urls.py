@@ -9,4 +9,5 @@ urlpatterns = [
     path('habit/<int:pk>/delete/', views.habit_delete, name='habit_delete'),
     path('habit/<int:pk>/archive/', views.habit_archive, name='habit_archive'),
     path('habit/<int:habit_id>/toggle/<str:date>/', views.toggle_habit_record, name='toggle_habit_record'),
+    path('toggle/', views.toggle_habit, name='toggle_habit'),
 ]

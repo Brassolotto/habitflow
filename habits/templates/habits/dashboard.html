@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Meus Hábitos</h1>
+        <a href="{% url 'habit_create' %}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+            Adicionar Hábito
+        </a>
+    </div>
+    
+    <!-- Filtros de Visualização para telas médias e grandes -->
+    <div class="hidden md:flex space-x-4 mb-6">
+        <a href="{% url 'dashboard' %}?view=weekly" 
+           class="px-3 py-1 rounded {% if view_type == 'weekly' %}bg-blue-500 text-white{% else %}bg-gray-200 hover:bg-gray-300{% endif %}">
+            Semanal
+        </a>
+        <a href="{% url 'dashboard' %}?view=monthly" 
+           class="px-3 py-1 rounded {% if view_type == 'monthly' %}bg-blue-500 text-white{% else %}bg-gray-200 hover:bg-gray-300{% endif %}">
+            Mensal
+        </a>
+        <a href="{% url 'dashboard' %}?view=compact" 
+           class="px-3 py-1 rounded {% if view_type == 'compact' %}bg-blue-500 text-white{% else %}bg-gray-200 hover:bg-gray-300{% endif %}">
+            Compacta
+        </a>
+    </div>
+    
+    <!-- Versão responsiva para telas pequenas -->
+    <div class="md:hidden mb-6">
+        <select id="view-selector" class="w-full rounded-md border-gray-300" onchange="changeView(this.value)">
+            <option value="weekly" {% if view_type == 'weekly' %}selected{% endif %}>Visualização Semanal</option>
+            <option value="monthly" {% if view_type == 'monthly' %}selected{% endif %}>Visualização Mensal</option>
+            <option value="compact" {% if view_type == 'compact' %}selected{% endif %}>Visualização Compacta</option>
+        </select>
+    </div>
+    
+    {% if habits_data %}
+        <!-- Cabeçalho do calendário -->
+        <div class="grid grid-cols-{{ date_range|length|add:1 }} gap-2 mb-4">
+            <div class="font-semibold">Hábito</div>
+            {% for date in date_range %}
+                <div class="text-center text-sm">
+                    {{ date|date:"D" }}<br>
+                    {{ date|date:"d/m" }}
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Lista de hábitos -->
+        {% for habit_data in habits_data %}
+    <div class="grid grid-cols-{{ date_range|length|add:1 }} gap-2 mb-2 items-center">
+        <div class="font-medium">
+            <a href="{% url 'habit_detail' habit_data.habit.id %}">
+                {{ habit_data.habit.name }}
+            </a>
+        </div>
+        
+        {% for day in habit_data.period_data %}
+            <div class="text-center">
+                <div class="w-8 h-8 mx-auto rounded-md cursor-pointer habit-cell 
+                     {% if day.completed %}bg-green-500{% else %}bg-gray-200{% endif %}
+                     {% if day.date == today %}border-2 border-blue-500{% endif %}"
+                     data-habit-id="{{ habit_data.habit.id }}"
+                     data-date="{{ day.date|date:'Y-m-d' }}">
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+<script>
+        function changeView(viewType) {
+            window.location.href = "{% url 'dashboard' %}?view=" + viewType;
+        }
+    </script>
+</div>
+{% endblock %}
