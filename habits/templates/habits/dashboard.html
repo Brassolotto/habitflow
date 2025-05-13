@@ -48,27 +48,35 @@
         
         <!-- Lista de hábitos -->
         {% for habit_data in habits_data %}
-    <div class="grid grid-cols-{{ date_range|length|add:1 }} gap-2 mb-2 items-center">
-        <div class="font-medium">
-            <a href="{% url 'habit_detail' habit_data.habit.id %}">
-                {{ habit_data.habit.name }}
-            </a>
-        </div>
-        
-        {% for day in habit_data.period_data %}
-            <div class="text-center">
-                <div class="w-8 h-8 mx-auto rounded-md cursor-pointer habit-cell 
-                     {% if day.completed %}bg-green-500{% else %}bg-gray-200{% endif %}
-                     {% if day.date == today %}border-2 border-blue-500{% endif %}"
-                     data-habit-id="{{ habit_data.habit.id }}"
-                     data-date="{{ day.date|date:'Y-m-d' }}">
+            <div class="grid grid-cols-{{ date_range|length|add:1 }} gap-2 mb-2 items-center">
+                <div class="font-medium">
+                    <a href="{% url 'habit_detail' habit_data.habit.id %}">
+                        {{ habit_data.habit.name }}
+                    </a>
                 </div>
+                
+                {% for day in habit_data.period_data %}
+                    <div class="text-center">
+                        <div class="w-8 h-8 mx-auto rounded-md cursor-pointer habit-cell 
+                             {% if day.completed %}bg-green-500{% else %}bg-gray-200{% endif %}
+                             {% if day.date == today %}border-2 border-blue-500{% endif %}"
+                             data-habit-id="{{ habit_data.habit.id }}"
+                             data-date="{{ day.date|date:'Y-m-d' }}">
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         {% endfor %}
-    </div>
-{% endfor %}
+    {% else %}
+        <div class="text-center py-8">
+            <p class="text-gray-500 mb-4">Você ainda não tem hábitos cadastrados.</p>
+            <a href="{% url 'habit_create' %}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                Adicione seu primeiro hábito
+            </a>
+        </div>
+    {% endif %}
 
-<script>
+    <script>
         function changeView(viewType) {
             window.location.href = "{% url 'dashboard' %}?view=" + viewType;
         }
