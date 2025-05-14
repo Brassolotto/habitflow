@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 @login_required
 def dashboard(request):
     """Dashboard principal com visualização de hábitos"""
-    # Obter o tipo de visualização da query string (padrão: semanal)
+    # Obter o tipo de visualização da query string ou da sessão
     view_type = request.GET.get('view')
     
     if view_type:
@@ -62,11 +62,22 @@ def dashboard(request):
             'today_completed': records_dict.get(today, False)
         })
     
+    # Calcular estatísticas
+    total_habits = len(habits)
+    completed_today = sum(1 for h in habits_data if h['today_completed'])
+    
+    # Calcular progresso de hoje
+    progress_today = 0
+    if total_habits > 0:
+        progress_today = int((completed_today / total_habits) * 100)
+    
     context = {
         'habits_data': habits_data,
         'date_range': date_range,
         'view_type': view_type,
-        'today': today
+        'today': today,
+        'total_habits': total_habits,
+        'progress_today': progress_today
     }
     
     return render(request, 'habits/dashboard.html', context)
@@ -120,10 +131,27 @@ def habit_detail(request, pk):
             'completed': completed
         })
     
+    # Calcular estatísticas
+    total_days = len(date_range)
+    completed_days = sum(1 for day in heatmap_data if day['completed'])
+    completion_rate = 0
+    if total_days > 0:
+        completion_rate = int((completed_days / total_days) * 100)
+    
+    # Calcular sequência atual
+    current_streak = 0
+    for day in heatmap_data:
+        if day['date'] <= today and day['completed']:
+            current_streak += 1
+        else:
+            break
+    
     context = {
         'habit': habit,
         'heatmap_data': heatmap_data,
-        'today': today
+        'today': today,
+        'completion_rate': completion_rate,
+        'current_streak': current_streak
     }
     
     return render(request, 'habits/habit_detail.html', context)

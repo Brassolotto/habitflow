@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .habit-cell {
+    @apply w-8 h-8 rounded-md cursor-pointer transition-all duration-300;
+  }
+  
+  .habit-cell:hover {
+    @apply transform scale-110;
+  }
+}

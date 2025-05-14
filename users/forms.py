@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
 
@@ -13,26 +12,25 @@ class UserRegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Adiciona classes do Tailwind a todos os campos
-        for field_name in self.fields:
-            self.fields[field_name].widget.attrs['class'] = 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'
-        
-        # Personalizações específicas
         self.fields['username'].widget.attrs.update({
-            'placeholder': 'Nome de usuário'
+            'class': 'bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 pr-3 py-2 rounded-md',
+            'placeholder': 'Nome completo'
         })
         
         self.fields['email'].widget.attrs.update({
+            'class': 'bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 pr-3 py-2 rounded-md',
             'placeholder': 'seu-email@exemplo.com'
         })
         
         self.fields['password1'].widget.attrs.update({
-            'placeholder': 'Senha'
+            'class': 'bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 pr-3 py-2 rounded-md',
+            'placeholder': '••••••••'
         })
         
         self.fields['password2'].widget.attrs.update({
-            'placeholder': 'Confirmar senha'
+            'class': 'bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 pr-3 py-2 rounded-md',
+            'placeholder': '••••••••'
         })
-
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
@@ -43,18 +41,21 @@ class UserUpdateForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field_name in self.fields:
-            self.fields[field_name].widget.attrs['class'] = 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'
-
+        self.fields['username'].widget.attrs.update({
+            'class': 'bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full rounded-md'
+        })
+        self.fields['email'].widget.attrs.update({
+            'class': 'bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full rounded-md'
+        })
 
 class CustomLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({
-            'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500',
-            'placeholder': 'Nome de usuário ou email'
+            'class': 'bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 pr-3 py-2 rounded-md',
+            'placeholder': 'seu-email@exemplo.com'
         })
         self.fields['password'].widget.attrs.update({
-            'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500',
-            'placeholder': 'Senha'
+            'class': 'bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 pr-3 py-2 rounded-md',
+            'placeholder': '••••••••'
         })

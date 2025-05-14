@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .habit-cell {
+    @apply w-8 h-8 rounded-md cursor-pointer transition-all duration-300;
+  }
+  
+  .habit-cell-completed {
+    @apply bg-green-500;
+  }
+  
+  .habit-cell-empty {
+    @apply bg-gray-700;
+  }
+  
+  .habit-cell:hover {
+    @apply transform scale-110;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-medium py-2 px-4 rounded-md transition-all duration-300;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md transition-all duration-300;
+  }
+  
+  .input-field {
+    @apply bg-gray-700 text-white border-gray-600 focus:border-purple-500 focus:ring-purple-500 rounded-md;
+  }
+  
+  .card {
+    @apply bg-gray-800 rounded-lg shadow-xl p-6;
+  }
+}
