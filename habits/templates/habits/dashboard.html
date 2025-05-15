@@ -2,139 +2,97 @@
 
 {% block content %}
 <div class="space-y-8">
-    <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Painel</h1>
-        <a href="{% url 'habit_create' %}" class="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-4 py-2 rounded-md flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-            </svg>
-            Adicionar Hábito
-        </a>
-    </div>
-    
     <!-- Cards de estatísticas -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-gray-800 rounded-lg shadow-xl p-6 flex items-center">
-            <div class="bg-purple-900 bg-opacity-50 p-3 rounded-full mr-4">
-                <svg class="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-            </div>
-            <div>
-                <h3 class="text-gray-400 text-sm">Progresso de Hoje</h3>
-                <p class="text-2xl font-bold">0%</p>
-            </div>
-        </div>
-        
-        <div class="bg-gray-800 rounded-lg shadow-xl p-6 flex items-center">
-            <div class="bg-green-900 bg-opacity-50 p-3 rounded-full mr-4">
-                <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                </svg>
-            </div>
-            <div>
-                <h3 class="text-gray-400 text-sm">Sequência Média</h3>
-                <p class="text-2xl font-bold">0 dias</p>
-            </div>
-        </div>
-        
-        <div class="bg-gray-800 rounded-lg shadow-xl p-6 flex items-center">
-            <div class="bg-blue-900 bg-opacity-50 p-3 rounded-full mr-4">
-                <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                </svg>
-            </div>
-            <div>
-                <h3 class="text-gray-400 text-sm">Hábitos Ativos</h3>
-                <p class="text-2xl font-bold">{{ habits_data|length }}</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Filtros de visualização -->
-    <div class="border-b border-gray-700 pb-2">
-        <div class="hidden md:flex space-x-6">
-            <a href="{% url 'dashboard' %}?view=weekly" class="{% if view_type == 'weekly' %}text-purple-500 border-b-2 border-purple-500{% else %}text-gray-400 hover:text-white{% endif %} pb-2 font-medium">Diário</a>
-            <a href="{% url 'dashboard' %}?view=monthly" class="{% if view_type == 'monthly' %}text-purple-500 border-b-2 border-purple-500{% else %}text-gray-400 hover:text-white{% endif %} pb-2 font-medium">Semanal</a>
-            <a href="{% url 'dashboard' %}?view=compact" class="{% if view_type == 'compact' %}text-purple-500 border-b-2 border-purple-500{% else %}text-gray-400 hover:text-white{% endif %} pb-2 font-medium">Mensal</a>
-        </div>
-        
-        <!-- Versão responsiva para telas pequenas -->
-        <div class="md:hidden mb-4">
-            <select id="view-selector" class="w-full bg-gray-700 text-white rounded-md border-gray-600 focus:border-purple-500" onchange="changeView(this.value)">
-                <option value="weekly" {% if view_type == 'weekly' %}selected{% endif %}>Visualização Diária</option>
-                <option value="monthly" {% if view_type == 'monthly' %}selected{% endif %}>Visualização Semanal</option>
-                <option value="compact" {% if view_type == 'compact' %}selected{% endif %}>Visualização Mensal</option>
-            </select>
-        </div>
-    </div>
-    
-    <!-- Lista de hábitos -->
-    <div>
-        <h2 class="text-xl font-semibold mb-4">Seus Hábitos</h2>
-        
-        {% if habits_data %}
-            <!-- Cabeçalho do calendário -->
-            <div class="bg-gray-800 rounded-lg p-4 mb-4">
-                <div class="grid grid-cols-{{ date_range|length|add:1 }} gap-2 mb-4">
-                    <div class="font-semibold text-gray-300">Hábito</div>
-                    {% for date in date_range %}
-                        <div class="text-center text-sm text-gray-400">
-                            {{ date|date:"D" }}<br>
-                            {{ date|date:"d/m" }}
-                        </div>
-                    {% endfor %}
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- Card: Hábitos Ativos -->
+        <div class="bg-gray-800 rounded-lg shadow-xl p-6">
+            <div class="flex flex-col">
+                <span class="text-gray-400 text-sm mb-1">Hábitos Ativos</span>
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold" id="total-habits">{{ total_habits }}</span>
+                    <span class="text-green-400 text-sm ml-2">+{{ habits_change }} desde o mês passado</span>
                 </div>
-                
-                <!-- Lista de hábitos -->
-                {% for habit_data in habits_data %}
-                    <div class="grid grid-cols-{{ date_range|length|add:1 }} gap-2 mb-4 items-center border-t border-gray-700 pt-4">
-                        <div class="font-medium">
-                            <a href="{% url 'habit_detail' habit_data.habit.id %}" class="hover:text-purple-400">
-                                {{ habit_data.habit.name }}
-                            </a>
-                        </div>
-                        
-                        {% for day in habit_data.period_data %}
-                            <div class="text-center">
-                                <div class="w-8 h-8 mx-auto rounded-md cursor-pointer habit-cell 
-                                     {% if day.completed %}bg-green-500{% else %}bg-gray-700{% endif %}
-                                     {% if day.date == today %}border-2 border-purple-500{% endif %}"
-                                     data-habit-id="{{ habit_data.habit.id }}"
-                                     data-date="{{ day.date|date:'Y-m-d' }}">
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+            </div>
+        </div>
+        
+        <!-- Card: Sequência Atual -->
+        <div class="bg-gray-800 rounded-lg shadow-xl p-6">
+            <div class="flex flex-col">
+                <span class="text-gray-400 text-sm mb-1">Sequência Atual</span>
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold" id="current-streak">{{ current_streak }} dias</span>
+                    <span class="text-gray-400 text-sm ml-2">Melhor: {{ best_streak }} dias</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card: Completados Hoje -->
+        <div class="bg-gray-800 rounded-lg shadow-xl p-6">
+            <div class="flex flex-col">
+                <span class="text-gray-400 text-sm mb-1">Completados Hoje</span>
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold" id="completed-today">{{ completed_today }}/{{ total_habits }}</span>
+                    <span class="text-gray-400 text-sm ml-2"><span id="progress-today">{{ progress_today }}</span>% concluído</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card: Taxa de Sucesso -->
+        <div class="bg-gray-800 rounded-lg shadow-xl p-6">
+            <div class="flex flex-col">
+                <span class="text-gray-400 text-sm mb-1">Taxa de Sucesso</span>
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold" id="success-rate">{{ success_rate }}%</span>
+                    <span class="text-green-400 text-sm ml-2">+{{ success_rate_change }}% desde o mês passado</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Visão Geral - Heatmap -->
+        <div class="lg:col-span-2 bg-gray-800 rounded-lg shadow-xl p-6">
+            <h2 class="text-xl font-semibold mb-4">Visão Geral</h2>
+            <p class="text-gray-400 text-sm mb-4">Seu progresso nos últimos 30 dias</p>
+            
+            <!-- Grid de visualização tipo heatmap -->
+            <div class="grid grid-cols-7 gap-2">
+                {% for i in range %}
+                    <div class="aspect-square rounded-md bg-gray-700 hover:bg-gray-600 transition-colors"></div>
                 {% endfor %}
             </div>
-        {% else %}
-            <div class="text-center py-12 bg-gray-800 rounded-lg">
-                <svg class="mx-auto h-12 w-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                </svg>
-                <p class="mt-4 text-gray-400 mb-4">Você ainda não tem nenhum hábito. Comece adicionando seu primeiro hábito!</p>
-                <a href="{% url 'habit_create' %}" class="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-4 py-2 rounded-md inline-flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    Adicionar Primeiro Hábito
-                </a>
-            </div>
-        {% endif %}
+        </div>
+        
+        <!-- Hábitos para Hoje -->
+        <div class="bg-gray-800 rounded-lg shadow-xl p-6">
+            <h2 class="text-xl font-semibold mb-4">Hábitos para Hoje</h2>
+            <p class="text-gray-400 text-sm mb-4">Marque conforme você completa</p>
+            
+            <ul class="space-y-4">
+                {% for habit_data in habits_data %}
+                <li class="flex items-center">
+                    <div class="w-6 h-6 rounded-full mr-3 cursor-pointer habit-check 
+                        {% if habit_data.today_completed %}bg-green-500{% else %}bg-gray-700{% endif %}"
+                        data-habit-id="{{ habit_data.habit.id }}"
+                        data-date="{{ today|date:'Y-m-d' }}">
+                    </div>
+                    <span class="{% if habit_data.today_completed %}line-through text-gray-500{% endif %}">
+                        {{ habit_data.habit.name }}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 
 <script>
-    function changeView(viewType) {
-        window.location.href = "{% url 'dashboard' %}?view=" + viewType;
-    }
-    
     document.addEventListener('DOMContentLoaded', function() {
-        const habitCells = document.querySelectorAll('.habit-cell');
+        // Seleciona todos os elementos de marcação de hábito
+        const habitChecks = document.querySelectorAll('.habit-check');
         
-        habitCells.forEach(cell => {
-            cell.addEventListener('click', function() {
+        habitChecks.forEach(check => {
+            check.addEventListener('click', function() {
                 const habitId = this.dataset.habitId;
                 const date = this.dataset.date;
                 
@@ -165,14 +123,37 @@
                         if (data.completed) {
                             this.classList.remove('bg-gray-700');
                             this.classList.add('bg-green-500');
+                            this.nextElementSibling.classList.add('line-through', 'text-gray-500');
                         } else {
                             this.classList.remove('bg-green-500');
                             this.classList.add('bg-gray-700');
+                            this.nextElementSibling.classList.remove('line-through', 'text-gray-500');
                         }
+                        
+                        // Atualiza os contadores
+                        updateCounters();
                     }
                 });
             });
         });
+        
+        function updateCounters() {
+            // Recarrega apenas os contadores via fetch
+            fetch('/counters/', {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Atualiza os contadores na página
+                document.getElementById('completed-today').textContent = `${data.completed_today}/${data.total_habits}`;
+                document.getElementById('progress-today').textContent = data.progress_today;
+                document.getElementById('current-streak').textContent = `${data.current_streak} dias`;
+                document.getElementById('success-rate').textContent = `${data.success_rate}%`;
+                document.getElementById('total-habits').textContent = data.total_habits;
+            });
+        }
         
         // Função para obter o cookie CSRF
         function getCookie(name) {
