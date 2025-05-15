@@ -79,3 +79,46 @@ document.addEventListener('DOMContentLoaded', function() {
         return cookieValue;
     }
 });
+function updateCounters() {
+    // Recarrega apenas os contadores via fetch
+    fetch('/counters/', {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Atualiza os contadores na página
+        document.getElementById('completed-today').textContent = `${data.completed_today}/${data.total_habits}`;
+        document.getElementById('progress-today').textContent = data.progress_today;
+        document.getElementById('current-streak').textContent = `${data.current_streak} dias`;
+        document.getElementById('success-rate').textContent = `${data.success_rate}%`;
+        document.getElementById('total-habits').textContent = data.total_habits;
+        
+        // Atualiza o heatmap se os dados estiverem disponíveis
+        if (data.daily_completion) {
+            updateHeatmap(data.daily_completion);
+        }
+    });
+}
+
+function updateHeatmap(dailyCompletion) {
+    // Seleciona todos os elementos do heatmap
+    const heatmapCells = document.querySelectorAll('.heatmap-cell');
+    
+    heatmapCells.forEach(cell => {
+        const date = cell.dataset.date;
+        if (date && dailyCompletion[date] !== undefined) {
+            const percentage = dailyCompletion[date];
+            const opacity = Math.max(0.2, Math.min(1.0, 0.2 + (percentage / 100) * 0.8));
+            
+            if (percentage > 0) {
+                cell.style.backgroundColor = `rgba(16, 185, 129, ${opacity})`;
+            } else {
+                cell.style.backgroundColor = '#374151'; // Cinza escuro para 0%
+            }
+            
+            cell.title = `${date} - ${percentage}% concluído`;
+        }
+    });
+}

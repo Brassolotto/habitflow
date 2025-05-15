@@ -109,6 +109,30 @@ def dashboard(request):
     # Implementação simplificada - em um sistema real, você calcularia isso com base em dados históricos
     best_streak = max(current_streak, 21)  # Usando o maior entre o atual e um valor padrão
     
+    # Para o heatmap na Visão Geral
+    # Obtém todos os dias dos últimos 30 dias
+    heatmap_dates = [today - timedelta(days=i) for i in range(29, -1, -1)]
+    
+    # Dicionário para armazenar a porcentagem de conclusão por dia
+    daily_completion = {}
+    
+    for date in heatmap_dates:
+        # Obter todos os registros de hábitos para esta data
+        day_records = HabitRecord.objects.filter(
+            habit__user=request.user,
+            habit__is_archived=False,
+            date=date
+        )
+        
+        total_habits_for_day = habits.count()
+        if total_habits_for_day > 0:
+            completed_habits = day_records.filter(completed=True).count()
+            completion_percentage = int((completed_habits / total_habits_for_day) * 100)
+        else:
+            completion_percentage = 0
+            
+        daily_completion[date.strftime('%Y-%m-%d')] = completion_percentage
+    
     # Calcular taxa de sucesso (últimos 30 dias)
     days_with_records = set()
     for habit in habits:
@@ -160,7 +184,8 @@ def dashboard(request):
         'success_rate': success_rate,
         'success_rate_change': success_rate_change,
         'habits_change': habits_change,
-        'range': range(30)  # Para uso no template
+        'heatmap_dates': heatmap_dates,
+        'daily_completion': daily_completion,
     }
     
     return render(request, 'habits/dashboard.html', context)
@@ -405,13 +430,33 @@ def get_counters(request):
             
             success_rate = int((successful_days / len(days_with_records)) * 100) if len(days_with_records) > 0 else 0
         
+        # Para o heatmap
+        heatmap_dates = [today - timedelta(days=i) for i in range(29, -1, -1)]
+        daily_completion = {}
+        
+        for date in heatmap_dates:
+            day_records = HabitRecord.objects.filter(
+                habit__user=request.user,
+                habit__is_archived=False,
+                date=date
+            )
+            
+            total_habits_for_day = habits.count()
+            if total_habits_for_day > 0:
+                completed_habits = day_records.filter(completed=True).count()
+                completion_percentage = int((completed_habits / total_habits_for_day) * 100)
+            else:
+                completion_percentage = 0
+                
+            daily_completion[date.strftime('%Y-%m-%d')] = completion_percentage
+        
         return JsonResponse({
             'completed_today': completed_today,
             'total_habits': total_habits,
             'progress_today': progress_today,
             'current_streak': current_streak,
-            'success_rate': success_rate
+            'success_rate': success_rate,
+            'daily_completion': daily_completion
         })
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
-# Note: The above code is a simplified version of the original code.

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load habit_tags %}
 
 {% block content %}
 <div class="space-y-8">
@@ -57,8 +58,16 @@
             
             <!-- Grid de visualização tipo heatmap -->
             <div class="grid grid-cols-7 gap-2">
-                {% for i in range %}
-                    <div class="aspect-square rounded-md bg-gray-700 hover:bg-gray-600 transition-colors"></div>
+                {% for date in heatmap_dates %}
+                    {% with date_str=date|date:'Y-m-d' %}
+                    {% with percentage=daily_completion|get_item:date_str %}
+                        <div class="aspect-square rounded-md cursor-pointer transition-colors heatmap-cell"
+                             data-date="{{ date_str }}"
+                             style="background-color: {% if percentage > 0 %}rgba(16, 185, 129, {{ percentage|intensity_color }}){% else %}#374151{% endif %};"
+                             title="{{ date|date:'d/m/Y' }} - {{ percentage }}% concluído">
+                        </div>
+                    {% endwith %}
+                    {% endwith %}
                 {% endfor %}
             </div>
         </div>
@@ -152,6 +161,32 @@
                 document.getElementById('current-streak').textContent = `${data.current_streak} dias`;
                 document.getElementById('success-rate').textContent = `${data.success_rate}%`;
                 document.getElementById('total-habits').textContent = data.total_habits;
+                
+                // Atualiza o heatmap se os dados estiverem disponíveis
+                if (data.daily_completion) {
+                    updateHeatmap(data.daily_completion);
+                }
+            });
+        }
+        
+        function updateHeatmap(dailyCompletion) {
+            // Seleciona todos os elementos do heatmap
+            const heatmapCells = document.querySelectorAll('.heatmap-cell');
+            
+            heatmapCells.forEach(cell => {
+                const date = cell.dataset.date;
+                if (date && dailyCompletion[date] !== undefined) {
+                    const percentage = dailyCompletion[date];
+                    const opacity = Math.max(0.2, Math.min(1.0, 0.2 + (percentage / 100) * 0.8));
+                    
+                    if (percentage > 0) {
+                        cell.style.backgroundColor = `rgba(16, 185, 129, ${opacity})`;
+                    } else {
+                        cell.style.backgroundColor = '#374151'; // Cinza escuro para 0%
+                    }
+                    
+                    cell.title = `${date} - ${percentage}% concluído`;
+                }
             });
         }
         
