@@ -3,11 +3,11 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 class Habit(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='habits')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    color = models.CharField(max_length=20, default='#3B82F6')  # Azul padrão
-    icon = models.CharField(max_length=50, blank=True, null=True)
+    color = models.CharField(max_length=7, default='#8B5CF6')  # Cor em formato hexadecimal
+    icon = models.CharField(max_length=20, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_archived = models.BooleanField(default=False)

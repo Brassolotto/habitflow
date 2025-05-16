@@ -440,3 +440,22 @@ def get_counters(request):
         })
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+@login_required
+def archived_habits(request):
+    """Lista os hábitos arquivados do usuário"""
+    habits = Habit.objects.filter(user=request.user, is_archived=True)
+    return render(request, 'habits/archived_habits.html', {'habits': habits})
+
+@login_required
+def habit_restore(request, pk):
+    """Restaura um hábito arquivado"""
+    habit = get_object_or_404(Habit, pk=pk, user=request.user, is_archived=True)
+    
+    if request.method == 'POST':
+        habit.is_archived = False
+        habit.save()
+        messages.success(request, 'Hábito restaurado com sucesso!')
+        return redirect('archived_habits')
+    
+    return redirect('archived_habits')

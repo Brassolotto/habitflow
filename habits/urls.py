@@ -12,5 +12,8 @@ urlpatterns = [
     path('habit/<int:habit_id>/toggle/<str:date>/', views.toggle_habit_record, name='toggle_habit_record'),
     path('toggle/', views.toggle_habit, name='toggle_habit'),
     path('counters/', views.get_counters, name='get_counters'),
+    path('habits/archived/', views.archived_habits, name='archived_habits'),
+    path('habit/<int:pk>/restore/', views.habit_restore, name='habit_restore'),
+
 ]
 

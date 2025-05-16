@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Hábitos Arquivados</h1>
+        <a href="{% url 'dashboard' %}" class="text-purple-400 hover:text-purple-300">
+            &larr; Voltar para dashboard
+        </a>
+    </div>
+    
+    {% if habits %}
+        <div class="bg-gray-800 rounded-lg shadow-xl p-6">
+            <ul class="divide-y divide-gray-700">
+                {% for habit in habits %}
+                <li class="py-4">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 rounded-full mr-3" style="background-color: {{ habit.color }}">
+                                {% if habit.icon %}
+                                <span class="flex items-center justify-center h-full w-full text-xs text-white">
+                                    <i class="fas fa-{{ habit.icon }}"></i>
+                                </span>
+                                {% endif %}
+                            </div>
+                            <span class="text-gray-300">{{ habit.name }}</span>
+                        </div>
+                        <div class="flex space-x-2">
+                            <form method="post" action="{% url 'habit_restore' habit.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-3 py-1 rounded-md text-sm">
+                                    Restaurar
+                                </button>
+                            </form>
+                            <a href="{% url 'habit_delete' habit.pk %}" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded-md text-sm">
+                                Excluir
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <div class="bg-gray-800 rounded-lg shadow-xl p-6 text-center">
+            <p class="text-gray-400 mb-4">Você não tem hábitos arquivados.</p>
+            <a href="{% url 'dashboard' %}" class="text-purple-400 hover:text-purple-300">
+                Voltar para dashboard
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
