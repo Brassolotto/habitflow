@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load habit_tags %}
 
 {% block content %}
 <div class="max-w-2xl mx-auto">
@@ -15,7 +16,10 @@
                     <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1">
                         Nome do Hábito
                     </label>
-                    <input type="text" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}" class="bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full rounded-md" placeholder="ex: Meditação Matinal">
+                    <input type="text" name="{{ form.name.name }}" id="{{ form.name.id_for_label }}" 
+                           value="{{ form.name.value|default:'' }}"
+                           class="bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full rounded-md" 
+                           placeholder="ex: Meditação Matinal">
                     {% if form.name.errors %}
                         <p class="text-red-500 text-xs mt-1">{{ form.name.errors.0 }}</p>
                     {% endif %}
@@ -25,7 +29,9 @@
                     <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1">
                         Descrição (opcional)
                     </label>
-                    <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}" rows="3" class="bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full rounded-md" placeholder="Breve descrição do seu hábito"></textarea>
+                    <textarea name="{{ form.description.name }}" id="{{ form.description.id_for_label }}" rows="3" 
+                              class="bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full rounded-md" 
+                              placeholder="Breve descrição do seu hábito">{{ form.description.value|default:'' }}</textarea>
                     {% if form.description.errors %}
                         <p class="text-red-500 text-xs mt-1">{{ form.description.errors.0 }}</p>
                     {% endif %}
@@ -41,28 +47,29 @@
                     </label>
                     <div class="flex space-x-4">
                         <div class="color-option">
-                            <input type="radio" name="{{ form.color.name }}" id="color-purple" value="#8B5CF6" class="sr-only" checked>
+                            <input type="radio" name="{{ form.color.name }}" id="color-purple" value="#8B5CF6" class="sr-only" 
+                                   {% if form.color.value == '#8B5CF6' or not form.color.value %}checked{% endif %}>
                             <label for="color-purple" class="w-8 h-8 bg-purple-500 rounded-full cursor-pointer flex items-center justify-center border-2 border-transparent focus:border-white"></label>
                         </div>
                         <div class="color-option">
-                            <input type="radio" name="{{ form.color.name }}" id="color-blue" value="#3B82F6" class="sr-only">
+                            <input type="radio" name="{{ form.color.name }}" id="color-blue" value="#3B82F6" class="sr-only"
+                                   {% if form.color.value == '#3B82F6' %}checked{% endif %}>
                             <label for="color-blue" class="w-8 h-8 bg-blue-500 rounded-full cursor-pointer flex items-center justify-center border-2 border-transparent"></label>
                         </div>
                         <div class="color-option">
-                            <input type="radio" name="{{ form.color.name }}" id="color-green" value="#10B981" class="sr-only">
+                            <input type="radio" name="{{ form.color.name }}" id="color-green" value="#10B981" class="sr-only"
+                                   {% if form.color.value == '#10B981' %}checked{% endif %}>
                             <label for="color-green" class="w-8 h-8 bg-green-500 rounded-full cursor-pointer flex items-center justify-center border-2 border-transparent"></label>
                         </div>
                         <div class="color-option">
-                            <input type="radio" name="{{ form.color.name }}" id="color-red" value="#EF4444" class="sr-only">
+                            <input type="radio" name="{{ form.color.name }}" id="color-red" value="#EF4444" class="sr-only"
+                                   {% if form.color.value == '#EF4444' %}checked{% endif %}>
                             <label for="color-red" class="w-8 h-8 bg-red-500 rounded-full cursor-pointer flex items-center justify-center border-2 border-transparent"></label>
                         </div>
                         <div class="color-option">
-                            <input type="radio" name="{{ form.color.name }}" id="color-orange" value="#F59E0B" class="sr-only">
+                            <input type="radio" name="{{ form.color.name }}" id="color-orange" value="#F59E0B" class="sr-only"
+                                   {% if form.color.value == '#F59E0B' %}checked{% endif %}>
                             <label for="color-orange" class="w-8 h-8 bg-orange-500 rounded-full cursor-pointer flex items-center justify-center border-2 border-transparent"></label>
-                        </div>
-                        <div class="color-option">
-                            <input type="radio" name="{{ form.color.name }}" id="color-teal" value="#14B8A6" class="sr-only">
-                            <label for="color-teal" class="w-8 h-8 bg-teal-500 rounded-full cursor-pointer flex items-center justify-center border-2 border-transparent"></label>
                         </div>
                     </div>
                 </div>
@@ -71,33 +78,18 @@
                     <label for="{{ form.icon.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1">
                         Ícone
                     </label>
-                    <select name="{{ form.icon.name }}" id="{{ form.icon.id_for_label }}" class="bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full rounded-md">
-                        <option value="activity">Atividade</option>
-                        <option value="book">Livro</option>
-                        <option value="code">Código</option>
-                        <option value="coffee">Café</option>
-                        <option value="dumbbell">Exercício</option>
-                        <option value="heart">Saúde</option>
-                        <option value="music">Música</option>
-                        <option value="pencil">Estudo</option>
-                        <option value="sun">Meditação</option>
-                        <option value="water">Água</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="mb-6">
-                <h2 class="text-lg font-semibold mb-4">Frequência</h2>
-                
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-300 mb-1">
-                        Com que frequência?
-                    </label>
-                    <select class="bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full rounded-md">
-                        <option>Diariamente</option>
-                        <option>Dias da semana (Seg-Sex)</option>
-                        <option>Fins de semana (Sáb-Dom)</option>
-                        <option>Personalizado</option>
+                    <select name="{{ form.icon.name }}" id="{{ form.icon.id_for_label }}" 
+                            class="bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full rounded-md">
+                        <option value="activity" {% if form.icon.value == 'activity' %}selected{% endif %}>Atividade</option>
+                        <option value="book" {% if form.icon.value == 'book' %}selected{% endif %}>Livro</option>
+                        <option value="code" {% if form.icon.value == 'code' %}selected{% endif %}>Código</option>
+                        <option value="coffee" {% if form.icon.value == 'coffee' %}selected{% endif %}>Café</option>
+                        <option value="dumbbell" {% if form.icon.value == 'dumbbell' %}selected{% endif %}>Exercício</option>
+                        <option value="heart" {% if form.icon.value == 'heart' %}selected{% endif %}>Saúde</option>
+                        <option value="music" {% if form.icon.value == 'music' %}selected{% endif %}>Música</option>
+                        <option value="pencil" {% if form.icon.value == 'pencil' %}selected{% endif %}>Estudo</option>
+                        <option value="sun" {% if form.icon.value == 'sun' %}selected{% endif %}>Meditação</option>
+                        <option value="water" {% if form.icon.value == 'water' %}selected{% endif %}>Água</option>
                     </select>
                 </div>
             </div>
@@ -110,7 +102,7 @@
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
-                    Criar Hábito
+                    {% if habit %}Atualizar{% else %}Criar{% endif %} Hábito
                 </button>
             </div>
         </form>
@@ -133,6 +125,12 @@
                 this.nextElementSibling.classList.add('border-white');
             }
         });
+    });
+    
+    // Initialize color selection
+    document.querySelectorAll('.color-option input:checked').forEach(input => {
+        input.nextElementSibling.classList.remove('border-transparent');
+        input.nextElementSibling.classList.add('border-white');
     });
 </script>
 {% endblock %}

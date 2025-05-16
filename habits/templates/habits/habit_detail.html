@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <div class="bg-white rounded-lg shadow-md p-6 border-l-4" style="border-color: {{ habit.color }}">
+<div class="max-w-2xl mx-auto px-4 py-8">
+    <div class="bg-gray-800 rounded-lg shadow-xl p-6 border-l-4" style="border-color: {{ habit.color }}">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">{{ habit.name }}</h1>
             <div class="flex space-x-2">
-                <a href="{% url 'habit_update' habit.pk %}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded">
+                <a href="{% url 'habit_update' habit.pk %}" class="bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-4 py-2 rounded-md">
                     Editar
                 </a>
-                <a href="{% url 'habit_archive' habit.pk %}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded">
+                <a href="{% url 'habit_archive' habit.pk %}" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
                     Arquivar
                 </a>
             </div>
         </div>
         
         {% if habit.description %}
-            <p class="text-gray-600 mb-6">{{ habit.description }}</p>
+            <p class="text-gray-400 mb-6">{{ habit.description }}</p>
         {% endif %}
         
         <div class="mb-6">
@@ -24,8 +24,8 @@
             <div class="grid grid-cols-7 gap-2">
                 {% for day in heatmap_data %}
                     <div class="aspect-square rounded-md cursor-pointer habit-cell 
-                         {% if day.completed %}bg-green-500{% else %}bg-gray-200{% endif %}
-                         {% if day.date == today %}border-2 border-blue-500{% endif %}"
+                         {% if day.completed %}bg-green-500{% else %}bg-gray-700{% endif %}
+                         {% if day.date == today %}border-2 border-purple-500{% endif %}"
                          data-habit-id="{{ habit.id }}"
                          data-date="{{ day.date|date:'Y-m-d' }}"
                          title="{{ day.date|date:'d/m/Y' }}">
@@ -34,9 +34,24 @@
             </div>
         </div>
         
-        <div class="mt-6">
-            <a href="{% url 'dashboard' %}" class="text-blue-500 hover:underline">
-                Voltar para dashboard
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-gray-700 rounded-lg p-4 text-center">
+                <p class="text-gray-400 text-sm">Sequência Atual</p>
+                <p class="text-2xl font-bold">{{ current_streak }} dias</p>
+            </div>
+            <div class="bg-gray-700 rounded-lg p-4 text-center">
+                <p class="text-gray-400 text-sm">Taxa de Conclusão</p>
+                <p class="text-2xl font-bold">{{ completion_rate }}%</p>
+            </div>
+            <div class="bg-gray-700 rounded-lg p-4 text-center">
+                <p class="text-gray-400 text-sm">Total de Dias</p>
+                <p class="text-2xl font-bold">{{ heatmap_data|length }}</p>
+            </div>
+        </div>
+        
+        <div class="mt-6 pt-6 border-t border-gray-700">
+            <a href="{% url 'dashboard' %}" class="text-purple-400 hover:text-purple-300">
+                &larr; Voltar para dashboard
             </a>
         </div>
     </div>

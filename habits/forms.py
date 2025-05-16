@@ -27,3 +27,9 @@ class HabitForm(forms.ModelForm):
         self.fields['icon'].widget.attrs.update({
             'class': 'bg-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 block w-full rounded-md'
         })
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if len(name) < 2:
+            raise forms.ValidationError("O nome do hábito deve ter pelo menos 2 caracteres.")
+        return name
