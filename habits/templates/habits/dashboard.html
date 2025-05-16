@@ -50,15 +50,39 @@
         </div>
     </div>
     
+    <!-- Filtros de Visualização -->
+    <div class="border-b border-gray-700 pb-2">
+        <div class="hidden md:flex space-x-6">
+            <a href="{% url 'dashboard' %}?view=weekly" class="{% if view_type == 'weekly' %}text-purple-500 border-b-2 border-purple-500{% else %}text-gray-400 hover:text-white{% endif %} pb-2 font-medium">
+                Semanal
+            </a>
+            <a href="{% url 'dashboard' %}?view=monthly" class="{% if view_type == 'monthly' %}text-purple-500 border-b-2 border-purple-500{% else %}text-gray-400 hover:text-white{% endif %} pb-2 font-medium">
+                Mensal
+            </a>
+            <a href="{% url 'dashboard' %}?view=compact" class="{% if view_type == 'compact' %}text-purple-500 border-b-2 border-purple-500{% else %}text-gray-400 hover:text-white{% endif %} pb-2 font-medium">
+                Compacta
+            </a>
+        </div>
+        
+        <!-- Versão responsiva para telas pequenas -->
+        <div class="md:hidden mb-4">
+            <select id="view-selector" class="w-full bg-gray-700 text-white rounded-md border-gray-600 focus:border-purple-500" onchange="changeView(this.value)">
+                <option value="weekly" {% if view_type == 'weekly' %}selected{% endif %}>Visualização Semanal</option>
+                <option value="monthly" {% if view_type == 'monthly' %}selected{% endif %}>Visualização Mensal</option>
+                <option value="compact" {% if view_type == 'compact' %}selected{% endif %}>Visualização Compacta</option>
+            </select>
+        </div>
+    </div>
+    
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Visão Geral - Heatmap -->
         <div class="lg:col-span-2 bg-gray-800 rounded-lg shadow-xl p-6">
             <h2 class="text-xl font-semibold mb-4">Visão Geral</h2>
-            <p class="text-gray-400 text-sm mb-4">Seu progresso nos últimos 30 dias</p>
+            <p class="text-gray-400 text-sm mb-4">Seu progresso nos últimos {{ date_range|length }} dias</p>
             
             <!-- Grid de visualização tipo heatmap -->
             <div class="grid grid-cols-7 gap-2">
-                {% for date in heatmap_dates %}
+                {% for date in date_range %}
                     {% with date_str=date|date:'Y-m-d' %}
                     {% with percentage=daily_completion|get_item:date_str %}
                         <div class="aspect-square rounded-md cursor-pointer transition-colors heatmap-cell"
@@ -96,6 +120,16 @@
 </div>
 
 <script>
+    function changeView(viewType) {
+        // Adicionar efeito de loading (opcional)
+    document.querySelectorAll('.heatmap-cell').forEach(cell => {
+        cell.classList.add('animate-pulse');
+    });
+    
+    // Redirecionar para a nova visualização
+    window.location.href = "{% url 'dashboard' %}?view=" + viewType;
+}
+    
     document.addEventListener('DOMContentLoaded', function() {
         // Seleciona todos os elementos de marcação de hábito
         const habitChecks = document.querySelectorAll('.habit-check');

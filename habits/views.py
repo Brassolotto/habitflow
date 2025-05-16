@@ -9,31 +9,27 @@ from datetime import datetime, timedelta
 @login_required
 def dashboard(request):
     """Dashboard principal com visualização de hábitos"""
-    # Obter o tipo de visualização da query string ou da sessão
-    view_type = request.GET.get('view')
-    
-    if view_type:
-        # Se especificado na URL, salvar na sessão
-        request.session['view_type'] = view_type
-    else:
-        # Caso contrário, usar da sessão ou o padrão
-        view_type = request.session.get('view_type', 'weekly')
+    # Obter o tipo de visualização da query string
+    view_type = request.GET.get('view', 'weekly')
     
     # Obter todos os hábitos ativos do usuário
     habits = Habit.objects.filter(user=request.user, is_archived=False)
     
-    # Obter a data atual e determinar o intervalo de datas
+    # Obter a data atual
     today = datetime.now().date()
     
     # Data de um mês atrás para comparações
     month_ago = today - timedelta(days=30)
     
-    # Determinar datas para visualização
+    # Determinar o intervalo de datas com base no tipo de visualização
     if view_type == 'monthly':
+        # Últimos 30 dias
         date_range = [today - timedelta(days=i) for i in range(29, -1, -1)]
     elif view_type == 'compact':
+        # Últimos 14 dias
         date_range = [today - timedelta(days=i) for i in range(13, -1, -1)]
     else:  # weekly
+        # Últimos 7 dias
         date_range = [today - timedelta(days=i) for i in range(6, -1, -1)]
     
     # Preparar dados para o template
@@ -111,7 +107,10 @@ def dashboard(request):
     
     # Para o heatmap na Visão Geral
     # Obtém todos os dias dos últimos 30 dias
-    heatmap_dates = [today - timedelta(days=i) for i in range(29, -1, -1)]
+    # heatmap_dates = [today - timedelta(days=i) for i in range(29, -1, -1)]
+
+    # Use o date_range para o heatmap:
+    heatmap_dates = date_range
     
     # Dicionário para armazenar a porcentagem de conclusão por dia
     daily_completion = {}
@@ -368,6 +367,20 @@ def get_counters(request):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         habits = Habit.objects.filter(user=request.user, is_archived=False)
         today = datetime.now().date()
+
+        # Obter o tipo de visualização da sessão
+        view_type = request.GET.get('view', 'weekly')
+
+        # Determinar o intervalo de datas com base no tipo de visualização
+        if view_type == 'monthly':
+            # Últimos 30 dias
+            date_range = [today - timedelta(days=i) for i in range(29, -1, -1)]
+        elif view_type == 'compact':
+            # Últimos 14 dias
+            date_range = [today - timedelta(days=i) for i in range(13, -1, -1)]
+        else:  # weekly
+            # Últimos 7 dias
+            date_range = [today - timedelta(days=i) for i in range(6, -1, -1)]
         
         # Contar hábitos completados hoje
         completed_today = HabitRecord.objects.filter(
@@ -431,10 +444,11 @@ def get_counters(request):
             success_rate = int((successful_days / len(days_with_records)) * 100) if len(days_with_records) > 0 else 0
         
         # Para o heatmap
-        heatmap_dates = [today - timedelta(days=i) for i in range(29, -1, -1)]
+        date_range = [today - timedelta(days=i) for i in range(29, -1, -1)]
         daily_completion = {}
         
-        for date in heatmap_dates:
+        for date in date_range:  # Use date_range em vez de heatmap_dates
+        # Obter todos os registros de hábitos para esta data    
             day_records = HabitRecord.objects.filter(
                 habit__user=request.user,
                 habit__is_archived=False,

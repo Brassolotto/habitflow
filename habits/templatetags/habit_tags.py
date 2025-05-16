@@ -13,3 +13,4 @@ def intensity_color(percentage):
     # Normaliza a porcentagem para um valor entre 0.2 e 1.0
     # 0% = 0.2 (verde bem claro), 100% = 1.0 (verde intenso)
     return max(0.2, min(1.0, 0.2 + (percentage / 100) * 0.8))
+
