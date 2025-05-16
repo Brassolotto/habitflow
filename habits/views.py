@@ -435,6 +435,8 @@ def get_counters(request):
             'current_streak': current_streak,
             'success_rate': success_rate,
             'daily_completion': daily_completion,
+            'view_type': view_type,
+            'date_range': [date.strftime('%Y-%m-%d') for date in date_range]
         })
     
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)

@@ -122,63 +122,61 @@
 <script>
     function changeView(viewType) {
     // Adicionar efeito de loading (opcional)
-    document.querySelectorAll('.heatmap-cell').forEach(cell => {
-        cell.classList.add('animate-pulse');
-    });
-    
-    // Redirecionar para a nova visualização
+    //document.querySelectorAll('.heatmap-cell').forEach(cell => {
+       // cell.classList.add('animate-pulse');
     window.location.href = "{% url 'dashboard' %}?view=" + viewType;
+    //});
 }
-    
+
     document.addEventListener('DOMContentLoaded', function() {
-        // Seleciona todos os elementos de marcação de hábito
-        const habitChecks = document.querySelectorAll('.habit-check');
-        
-        habitChecks.forEach(check => {
-            check.addEventListener('click', function() {
-                const habitId = this.dataset.habitId;
-                const date = this.dataset.date;
+    // Seleciona todos os elementos de marcação de hábito
+    const habitChecks = document.querySelectorAll('.habit-check');
+    
+    habitChecks.forEach(check => {
+        check.addEventListener('click', function() {
+            const habitId = this.dataset.habitId;
+            const date = this.dataset.date;
+            
+            // Adiciona efeito visual imediato
+            this.classList.add('animate-pulse');
+            
+            // Cria o objeto FormData para enviar os dados
+            const formData = new FormData();
+            formData.append('habit_id', habitId);
+            formData.append('date', date);
+            
+            // Envia requisição AJAX para marcar/desmarcar o hábito
+            fetch('/toggle/', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Remove efeito de pulse
+                this.classList.remove('animate-pulse');
                 
-                // Adiciona efeito visual imediato
-                this.classList.add('animate-pulse');
-                
-                // Cria o objeto FormData para enviar os dados
-                const formData = new FormData();
-                formData.append('habit_id', habitId);
-                formData.append('date', date);
-                
-                // Envia requisição AJAX para marcar/desmarcar o hábito
-                fetch('/toggle/', {
-                    method: 'POST',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Remove efeito de pulse
-                    this.classList.remove('animate-pulse');
-                    
-                    if (data.status === 'success') {
-                        // Atualiza a aparência do elemento
-                        if (data.completed) {
-                            this.classList.remove('bg-gray-700');
-                            this.classList.add('bg-green-500');
-                            this.nextElementSibling.classList.add('line-through', 'text-gray-500');
-                        } else {
-                            this.classList.remove('bg-green-500');
-                            this.classList.add('bg-gray-700');
-                            this.nextElementSibling.classList.remove('line-through', 'text-gray-500');
-                        }
-                        
-                        // Atualiza os contadores
-                        updateCounters();
+                if (data.status === 'success') {
+                    // Atualiza a aparência do elemento
+                    if (data.completed) {
+                        this.classList.remove('bg-gray-700');
+                        this.classList.add('bg-green-500');
+                        this.nextElementSibling.classList.add('line-through', 'text-gray-500');
+                    } else {
+                        this.classList.remove('bg-green-500');
+                        this.classList.add('bg-gray-700');
+                        this.nextElementSibling.classList.remove('line-through', 'text-gray-500');
                     }
-                });
+                    
+                    // Atualiza os contadores
+                    updateCounters();
+                }
             });
         });
+    });
         
         function updateCounters() {
             // Recarrega apenas os contadores via fetch
