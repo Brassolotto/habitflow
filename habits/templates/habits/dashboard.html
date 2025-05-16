@@ -74,9 +74,9 @@
         </div>
     </div>
     
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="w-full md:flex md:flex-row md:gap-6">
         <!-- Visão Geral - Heatmap -->
-        <div class="lg:col-span-2 bg-gray-800 rounded-lg shadow-xl p-6">
+        <div class="bg-gray-800 rounded-lg shadow-xl p-6 w-full md:flex-grow">
             <h2 class="text-xl font-semibold mb-4">Visão Geral</h2>
             <p class="text-gray-400 text-sm mb-4">Seu progresso nos últimos {{ date_range|length }} dias</p>
             
@@ -85,18 +85,24 @@
             {% for date in date_range %}
                 {% with date_str=date|date:'Y-m-d' %}
                 {% with percentage=daily_completion|get_item:date_str %}
-                    <div class="aspect-square rounded-md cursor-pointer transition-colors heatmap-cell"
-                        data-date="{{ date_str }}"
-                        style="background-color: {% if percentage > 0 %}rgba({{ habit_data.habit.color|color_to_rgb }}, {{ percentage|intensity_color }}){% else %}#374151{% endif %};"
-                        title="{{ date|date:'d/m/Y' }} - {{ percentage }}% concluído">
+                    <div class="h-8 w-14 rounded-md cursor-pointer transition-colors heatmap-cell"
+                         data-date="{{ date_str }}"
+                         style="background-color: {% if percentage > 0 %}rgba(16, 185, 129, {{ percentage|intensity_color }}){% else %}#374151{% endif %};"
+                         title="{{ date|date:'d/m/Y' }} - {{ percentage }}% concluído">
                     </div>
                 {% endwith %}
                 {% endwith %}
             {% endfor %}
         </div>
+    </div>
+    
+    <div class="bg-gray-800 rounded-lg shadow-xl p-6 mt-6 md:mt-0 md:w-1/3">
 
         
         <!-- Lista de hábitos para hoje -->
+        <h2 class="text-xl font-semibold mb-4">Hábitos para Hoje</h2>
+        <p class="text-gray-400 text-sm mb-4">Marque conforme você completa</p>
+        
         <ul class="space-y-4">
             {% for habit_data in habits_data %}
             <li class="flex items-center">
@@ -114,7 +120,6 @@
                     </span>
                     {% endif %}
                 </div>
-
                 <span class="{% if habit_data.today_completed %}line-through text-gray-500{% endif %}">
                     {{ habit_data.habit.name }}
                 </span>
@@ -126,8 +131,6 @@
             </li>
             {% endfor %}
         </ul>
-
-        </div>
     </div>
 </div>
 
