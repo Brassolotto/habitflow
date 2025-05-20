@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .habit-check {
+    @apply w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer;
+  }
+  
+  .habit-check:hover {
+    @apply transform scale-110;
+  }
+  
+  .habit-cell {
+    @apply w-8 h-8 rounded-md cursor-pointer transition-all duration-300;
+  }
+  
+  .habit-cell:hover {
+    @apply transform scale-110;
+  }
+  
+  .habit-cell-completed {
+    @apply bg-green-500;
+  }
+  
+  .habit-cell-empty {
+    @apply bg-gray-700;
+  }
+}

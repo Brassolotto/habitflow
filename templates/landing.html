@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitFlow - Transforme seus hábitos, transforme sua vida</title>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans">
+    <!-- Hero Section com fundo roxo -->
+    <section class="bg-purple-700 text-white py-16 md:py-24">
+        <div class="container mx-auto px-4 md:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <!-- Coluna de texto -->
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                        Desenvolva melhores hábitos e transforme sua vida
+                    </h1>
+                    <p class="text-lg mb-8">
+                        Acompanhe, analise e melhore seus hábitos diários com o HabitFlow. Simples, bonito e eficaz para ajudar você a alcançar seus objetivos.
+                    </p>
+                    <a href="{% url 'dashboard' %}" class="bg-white text-purple-700 hover:bg-gray-100 font-medium rounded-md px-6 py-3 inline-flex items-center">
+                        Ir para o Painel
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+                
+                <!-- Coluna com card de hábitos -->
+                <div class="md:w-5/12">
+                    <div class="bg-gray-900 rounded-lg p-6 shadow-xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">Hábitos Diários</h2>
+                            <div class="bg-teal-600 text-white px-3 py-1 rounded-md text-sm">
+                                Sequência Atual<br>12 dias
+                            </div>
+                        </div>
+                        
+                        <!-- Lista de hábitos -->
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                                    <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-gray-300">Meditação Matinal</span>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                                    <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-gray-300">Ler 30 minutos</span>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                                    <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-gray-300">Exercício Físico</span>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-green-500 flex items-center justify-center mr-3">
+                                    <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-gray-300">Beber 8 copos de água</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de recursos com fundo escuro -->
+    <section class="bg-gray-900 text-white py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4">Desenvolva hábitos duradouros</h2>
+            <p class="text-center text-gray-300 mb-12 max-w-3xl mx-auto">
+                O HabitFlow oferece todas as ferramentas necessárias para construir melhores hábitos e viver uma vida mais saudável e produtiva.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <div class="bg-purple-700 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Acompanhe seu Progresso</h3>
+                    <p class="text-gray-400">
+                        Registre seus hábitos com um simples toque e veja suas sequências crescerem dia após dia.
+                    </p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <div class="bg-purple-700 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Visualize seu Crescimento</h3>
+                    <p class="text-gray-400">
+                        Veja estatísticas detalhadas e mapas de calor para entender seus padrões e identificar áreas de melhoria.
+                    </p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="bg-gray-800 rounded-lg p-6">
+                    <div class="bg-purple-700 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                        <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Construa Consistência</h3>
+                    <p class="text-gray-400">
+                        Desenvolva hábitos duradouros através de acompanhamento consistente e contadores de sequência motivadores.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-4">Pronto para transformar seus hábitos?</h2>
+            <p class="text-purple-400 text-xl mb-8">Comece a acompanhar hoje gratuitamente.</p>
+            <a href="{% url 'register' %}" class="bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-md px-6 py-3 inline-flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                </svg>
+                Cadastre-se grátis
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-8 border-t border-gray-800">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <p>&copy; 2025 HabitFlow. Todos os direitos reservados.</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="#" class="hover:text-white">Política de Privacidade</a>
+                <a href="#" class="hover:text-white">Termos de Uso</a>
+                <a href="#" class="hover:text-white">Contato</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
